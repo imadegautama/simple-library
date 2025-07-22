@@ -38,11 +38,11 @@ function FormAnggota({ anggota, mode = 'create' }: FormProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: route('dashboard'),
         },
         {
             title: 'Manajemen Anggota',
-            href: '/anggota',
+            href: route('anggota.index'),
         },
         {
             title: isEditing ? 'Edit Anggota' : 'Tambah Anggota',
@@ -61,7 +61,7 @@ function FormAnggota({ anggota, mode = 'create' }: FormProps) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        const url = isEditing ? `/anggota/${anggota?.id}` : '/anggota';
+        const url = isEditing ? route('anggota.update', anggota?.id) : route('anggota.store');
 
         post(url, {
             onSuccess: () => {
@@ -84,7 +84,7 @@ function FormAnggota({ anggota, mode = 'create' }: FormProps) {
                     </div>
 
                     <Button asChild variant="outline">
-                        <Link href="/anggota">
+                        <Link href={route('anggota.index')}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Kembali
                         </Link>
@@ -103,7 +103,7 @@ function FormAnggota({ anggota, mode = 'create' }: FormProps) {
                                     {/* Nama */}
                                     <div className="md:col-span-2">
                                         <Label htmlFor="name" required>
-                                            Name Lengkap
+                                            Nama Lengkap
                                         </Label>
                                         <Input
                                             id="name"

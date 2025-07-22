@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,6 +17,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('buku', BukuController::class);
     Route::resource('anggota', AnggotaController::class);
+    Route::resource('peminjaman', PeminjamanController::class);
+    Route::post('peminjaman/{peminjaman}/return', [PeminjamanController::class, 'returnBook'])->name('peminjaman.return');
 });
 
 require __DIR__ . '/settings.php';

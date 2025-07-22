@@ -48,11 +48,11 @@ function FormBuku({ book, mode = 'create' }: FormProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
-            href: '/dashboard',
+            href: route('dashboard'),
         },
         {
             title: 'Manajemen Buku',
-            href: '/buku',
+            href: route('buku.index'),
         },
         {
             title: isEditing ? 'Edit Buku' : 'Tambah Buku',
@@ -99,7 +99,7 @@ function FormBuku({ book, mode = 'create' }: FormProps) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        const url = isEditing ? `/buku/${book?.id_buku}` : '/buku';
+        const url = isEditing ? route('buku.update', book?.id_buku) : route('buku.store');
 
         if (isEditing) {
             post(url, {
@@ -173,7 +173,7 @@ function FormBuku({ book, mode = 'create' }: FormProps) {
                     </div>
 
                     <Button asChild variant="outline">
-                        <Link href="/buku">
+                        <Link href={route('buku.index')}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Kembali
                         </Link>
