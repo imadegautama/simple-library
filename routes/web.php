@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\BukuController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,7 +14,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('buku', BookController::class);
+    Route::resource('buku', BukuController::class);
+    Route::resource('anggota', AnggotaController::class);
 });
 
 require __DIR__ . '/settings.php';

@@ -15,28 +15,26 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('dashboard'),
     },
     {
-        title: 'Manajemen Buku',
+        title: 'Manajemen Anggota',
         href: '',
     },
 ];
-
-type Buku = {
-    id_buku: number;
-    judul: string;
-    penulis: string;
-    isbn: string;
-    stok: number;
+type Anggota = {
+    id: number;
+    name: string;
+    email: string;
+    telepon: string;
 };
 
-type BukuIndexPageProps = {
-    buku: Buku[];
+type AnggotaIndexPageProps = {
+    anggota: Anggota[];
 };
 
-function BukuIndexPage({ buku }: BukuIndexPageProps) {
-    const deleteDialog = useConfirmDialog<Buku>({
+function AnggotaIndexPage({ anggota }: AnggotaIndexPageProps) {
+    const deleteDialog = useConfirmDialog<Anggota>({
         onConfirm: async (item) => {
             if (item) {
-                router.delete(route('buku.destroy', item.id_buku), {
+                router.delete(route('anggota.destroy', item.id), {
                     preserveScroll: true,
                 });
             }
@@ -44,35 +42,28 @@ function BukuIndexPage({ buku }: BukuIndexPageProps) {
     });
 
     // Define columns for DataTable
-    const columns: DataTableColumn<Buku>[] = [
+    const columns: DataTableColumn<Anggota>[] = [
         {
-            key: 'judul',
-            header: 'Judul',
+            key: 'name',
+            header: 'Nama',
             className: 'font-medium',
             sortable: true,
             searchable: true,
         },
         {
-            key: 'penulis',
-            header: 'Penulis',
+            key: 'email',
+            header: 'Email',
             sortable: true,
             searchable: true,
         },
         {
-            key: 'isbn',
-            header: 'ISBN',
+            key: 'telepon',
+            header: 'Telepon',
             sortable: true,
             searchable: true,
         },
         {
-            key: 'stok',
-            header: 'Stok',
-            cell: (item) => `${item.stok}`,
-            sortable: true,
-            searchable: false,
-        },
-        {
-            key: 'id_buku', // Use 'id' as key to avoid duplicate key issues
+            key: 'id', // Use 'id' as key to avoid duplicate key issues
             header: 'Aksi',
             cell: (item) => (
                 <DropdownMenu>
@@ -84,7 +75,7 @@ function BukuIndexPage({ buku }: BukuIndexPageProps) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
-                            <Link href={route('buku.edit', item.id_buku)}>
+                            <Link href={route('anggota.edit', item.id)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </Link>
@@ -104,41 +95,41 @@ function BukuIndexPage({ buku }: BukuIndexPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Manajemen Buku" />
+            <Head title="Manajemen Anggota" />
 
             <div className="space-y-6 p-5">
                 {/* Header Section */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-foreground">Manajemen Buku</h1>
+                        <h1 className="text-3xl font-bold text-foreground">Manajemen Anggota</h1>
                     </div>
 
                     <Button asChild>
-                        <Link href={route('buku.create')}>
+                        <Link href={route('anggota.create')}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Tambah Buku
+                            Tambah Anggota
                         </Link>
                     </Button>
                 </div>
 
                 {/* DataTable */}
                 <DataTable
-                    data={buku}
+                    data={anggota}
                     columns={columns}
-                    title="Daftar Buku"
-                    description={`Menampilkan ${buku.length} buku dalam sistem`}
-                    searchPlaceholder="Cari berdasarkan judul, penulis, atau kategori..."
+                    title="Daftar Anggota"
+                    description={`Menampilkan ${anggota.length} anggota dalam sistem`}
+                    searchPlaceholder="Cari berdasarkan nama, email, atau telepon..."
                     showSearch={true}
                     showColumnToggle={true}
                     showPagination={true}
                     pageSize={10}
                     emptyState={{
                         icon: <Search className="h-8 w-8 text-muted-foreground" />,
-                        title: 'Belum ada buku',
-                        description: 'Mulai dengan menambahkan buku pertama ke koleksi perpustakaan.',
+                        title: 'Belum ada anggota',
+                        description: 'Mulai dengan menambahkan anggota.',
                         action: (
                             <Button asChild variant="outline">
-                                <Link href={route('buku.create')}>Tambah Buku Pertama</Link>
+                                <Link href={route('anggota.create')}>Tambah Anggota Pertama</Link>
                             </Button>
                         ),
                     }}
@@ -151,7 +142,7 @@ function BukuIndexPage({ buku }: BukuIndexPageProps) {
                 onOpenChange={deleteDialog.hideConfirm}
                 onConfirm={deleteDialog.handleConfirm}
                 title="Konfirmasi Hapus"
-                description={`Apakah Anda yakin ingin menghapus "${deleteDialog.item?.judul}"? Tindakan ini tidak dapat dibatalkan.`}
+                description={`Apakah Anda yakin ingin menghapus "${deleteDialog.item?.name}"? Tindakan ini tidak dapat dibatalkan.`}
                 confirmText="Hapus"
                 cancelText="Batal"
                 variant="destructive"
@@ -161,4 +152,4 @@ function BukuIndexPage({ buku }: BukuIndexPageProps) {
     );
 }
 
-export default BukuIndexPage;
+export default AnggotaIndexPage;

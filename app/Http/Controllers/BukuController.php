@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
-class BookController extends Controller
+class BukuController extends Controller
 {
     public function index()
     {

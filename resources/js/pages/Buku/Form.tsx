@@ -314,18 +314,6 @@ function FormBuku({ book, mode = 'create' }: FormProps) {
                                                   ? 'Perbarui Buku'
                                                   : 'Simpan Buku'}
                                         </Button>
-                                        {!isEditing && (
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={() => {
-                                                    reset();
-                                                    setPreviewImage(null);
-                                                }}
-                                            >
-                                                Reset
-                                            </Button>
-                                        )}
                                     </div>
                                 </form>
                             </CardContent>
