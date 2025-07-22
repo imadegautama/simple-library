@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ArrowRight, BookOpen, Calendar, Clock, Library, Search, Shield, TrendingUp, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, Calendar, Clock, Library, Search, Shield, Star, TrendingUp, Users } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -62,13 +62,13 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
 
-            <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
                 {/* Header Navigation */}
                 <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
                     <div className="container mx-auto px-4 py-4">
                         <nav className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                                <Library className="h-8 w-8 text-green-600" />
+                                <Library className="h-8 w-8 text-blue-600" />
                                 <span className="text-2xl font-bold text-gray-900">SiPerpus</span>
                             </div>
 
@@ -100,7 +100,7 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="mb-6 text-5xl font-bold text-gray-900 md:text-6xl">
                             Selamat Datang di
-                            <span className="block text-green-600">SiPerpus</span>
+                            <span className="block text-blue-600">SiPerpus</span>
                         </h1>
                         <p className="mb-8 text-xl leading-relaxed text-gray-600">
                             Sistem Informasi Perpustakaan modern yang memudahkan Anda dalam mengelola dan meminjam buku dengan teknologi terdepan
@@ -127,7 +127,7 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                     <div className="container mx-auto px-4">
                         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
                             <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold text-green-600 md:text-4xl">{stats.totalBuku.toLocaleString()}</div>
+                                <div className="mb-2 text-3xl font-bold text-blue-600 md:text-4xl">{stats.totalBuku.toLocaleString()}</div>
                                 <div className="text-gray-600">Total Buku</div>
                             </div>
                             <div className="text-center">
@@ -135,11 +135,11 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                                 <div className="text-gray-600">Buku Tersedia</div>
                             </div>
                             <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold text-green-600 md:text-4xl">{stats.memberCount.toLocaleString()}</div>
+                                <div className="mb-2 text-3xl font-bold text-purple-600 md:text-4xl">{stats.memberCount.toLocaleString()}</div>
                                 <div className="text-gray-600">Anggota Aktif</div>
                             </div>
                             <div className="text-center">
-                                <div className="mb-2 text-3xl font-bold text-green-600 md:text-4xl">{stats.totalPeminjaman.toLocaleString()}</div>
+                                <div className="mb-2 text-3xl font-bold text-orange-600 md:text-4xl">{stats.totalPeminjaman.toLocaleString()}</div>
                                 <div className="text-gray-600">Total Peminjaman</div>
                             </div>
                         </div>
@@ -160,8 +160,8 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                             {features.map((feature, index) => (
                                 <Card key={index} className="text-center transition-shadow hover:shadow-lg">
                                     <CardHeader>
-                                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
-                                            <feature.icon className="h-6 w-6 text-green-600" />
+                                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+                                            <feature.icon className="h-6 w-6 text-blue-600" />
                                         </div>
                                         <CardTitle className="text-xl">{feature.title}</CardTitle>
                                     </CardHeader>
@@ -184,32 +184,12 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
 
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {bukuTersedia.map((buku) => (
-                                <Card key={buku.id} className="overflow-hidden transition-shadow hover:shadow-lg">
-                                    {/* Book Cover */}
-                                    <div className="relative h-48 overflow-hidden bg-gray-100">
-                                        {buku.cover ? (
-                                            <img
-                                                src={buku.cover}
-                                                alt={`Cover ${buku.judul}`}
-                                                className="h-full w-full object-cover transition-transform hover:scale-105"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-green-50 to-green-100">
-                                                <div className="text-center">
-                                                    <BookOpen className="mx-auto h-12 w-12 text-green-400" />
-                                                    <p className="mt-2 text-sm text-green-500">No Cover</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <div className="absolute top-2 right-2 flex gap-1">
+                                <Card key={buku.id} className="transition-shadow hover:shadow-lg">
+                                    <CardHeader className="pb-3">
+                                        <div className="flex items-start justify-between">
                                             <Badge variant="secondary" className="text-xs">
                                                 Stok: {buku.stok}
                                             </Badge>
-                                        </div>
-                                    </div>
-
-                                    <CardHeader className="pb-3">
-                                        <div className="flex items-start justify-between">
                                             <Badge variant="outline" className="text-xs">
                                                 {buku.tahun_terbit}
                                             </Badge>
@@ -224,6 +204,15 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                                                 <span>{buku.penerbit}</span>
                                             </div>
                                             {buku.deskripsi && <p className="mt-3 line-clamp-3 text-sm text-gray-500">{buku.deskripsi}</p>}
+                                        </div>
+
+                                        <div className="mt-4 border-t pt-4">
+                                            <div className="flex items-center gap-1 text-yellow-500">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star key={i} className={`h-4 w-4 ${i < 4 ? 'fill-current' : ''}`} />
+                                                ))}
+                                                <span className="ml-1 text-sm text-gray-600">4.0</span>
+                                            </div>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -243,10 +232,10 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                 </section>
 
                 {/* CTA Section */}
-                <section className="bg-green-600 py-20">
+                <section className="bg-blue-600 py-20">
                     <div className="container mx-auto px-4 text-center">
                         <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">Mulai Perjalanan Literasi Anda</h2>
-                        <p className="mx-auto mb-8 max-w-2xl text-xl text-green-100">
+                        <p className="mx-auto mb-8 max-w-2xl text-xl text-blue-100">
                             Bergabunglah dengan ribuan pembaca yang telah mempercayakan kebutuhan literasi mereka kepada SiPerpus
                         </p>
 
@@ -257,6 +246,9 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                                         <Users className="mr-2 h-5 w-5" />
                                         Daftar Gratis
                                     </Link>
+                                </Button>
+                                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600" asChild>
+                                    <Link href={route('login')}>Masuk Sekarang</Link>
                                 </Button>
                             </div>
                         ) : (
@@ -275,7 +267,7 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
                     <div className="container mx-auto px-4">
                         <div className="flex flex-col items-center justify-between md:flex-row">
                             <div className="mb-4 flex items-center space-x-2 md:mb-0">
-                                <Library className="h-8 w-8 text-green-400" />
+                                <Library className="h-8 w-8 text-blue-400" />
                                 <span className="text-2xl font-bold">SiPerpus</span>
                             </div>
                             <div className="text-center text-gray-400 md:text-right">
