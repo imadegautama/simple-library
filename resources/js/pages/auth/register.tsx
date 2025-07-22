@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from 'lucide-react';
+import { Eye, EyeOff, LoaderCircle, Lock, Mail, MapPin, Phone, User } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
 import InputError from '@/components/input-error';
@@ -12,25 +12,26 @@ import AuthLayout from '@/layouts/auth-layout';
 type RegisterForm = {
     name: string;
     email: string;
+    telepon: string;
+    alamat: string;
     password: string;
-    password_confirmation: string;
 };
 
 export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
         name: '',
         email: '',
+        telepon: '',
+        alamat: '',
         password: '',
-        password_confirmation: '',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+            onFinish: () => reset('password'),
         });
     };
 
@@ -86,6 +87,50 @@ export default function Register() {
                     </div>
 
                     <div className="space-y-2">
+                        <Label htmlFor="telepon" className="text-sm font-medium text-foreground">
+                            Nomor Telepon
+                        </Label>
+                        <div className="relative">
+                            <Phone className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                id="telepon"
+                                type="tel"
+                                required
+                                tabIndex={3}
+                                autoComplete="tel"
+                                value={data.telepon}
+                                onChange={(e) => setData('telepon', e.target.value)}
+                                disabled={processing}
+                                placeholder="08xxxxxxxxxx"
+                                className="h-11 pl-10"
+                            />
+                        </div>
+                        <InputError message={errors.telepon} />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="alamat" className="text-sm font-medium text-foreground">
+                            Alamat
+                        </Label>
+                        <div className="relative">
+                            <MapPin className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                id="alamat"
+                                type="text"
+                                required
+                                tabIndex={4}
+                                autoComplete="street-address"
+                                value={data.alamat}
+                                onChange={(e) => setData('alamat', e.target.value)}
+                                disabled={processing}
+                                placeholder="Masukkan alamat"
+                                className="h-11 pl-10"
+                            />
+                        </div>
+                        <InputError message={errors.alamat} />
+                    </div>
+
+                    <div className="space-y-2">
                         <Label htmlFor="password" className="text-sm font-medium text-foreground">
                             Password
                         </Label>
@@ -95,7 +140,7 @@ export default function Register() {
                                 id="password"
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                tabIndex={3}
+                                tabIndex={5}
                                 autoComplete="new-password"
                                 value={data.password}
                                 onChange={(e) => setData('password', e.target.value)}
@@ -115,40 +160,10 @@ export default function Register() {
                         <InputError message={errors.password} />
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="password_confirmation" className="text-sm font-medium text-foreground">
-                            Konfirmasi Password
-                        </Label>
-                        <div className="relative">
-                            <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                            <Input
-                                id="password_confirmation"
-                                type={showPasswordConfirmation ? 'text' : 'password'}
-                                required
-                                tabIndex={4}
-                                autoComplete="new-password"
-                                value={data.password_confirmation}
-                                onChange={(e) => setData('password_confirmation', e.target.value)}
-                                disabled={processing}
-                                placeholder="Ulangi password"
-                                className="h-11 pr-10 pl-10"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                                className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-                                tabIndex={-1}
-                            >
-                                {showPasswordConfirmation ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                            </button>
-                        </div>
-                        <InputError message={errors.password_confirmation} />
-                    </div>
-
                     <Button
                         type="submit"
                         className="mt-6 h-11 w-full bg-primary font-medium text-primary-foreground hover:bg-primary/90"
-                        tabIndex={5}
+                        tabIndex={6}
                         disabled={processing}
                     >
                         {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
@@ -159,7 +174,7 @@ export default function Register() {
                 <div className="text-center">
                     <p className="text-sm text-muted-foreground">
                         Sudah punya akun?{' '}
-                        <TextLink href={route('login')} tabIndex={6} className="font-medium text-primary hover:text-primary/80">
+                        <TextLink href={route('login')} tabIndex={7} className="font-medium text-primary hover:text-primary/80">
                             Masuk di sini
                         </TextLink>
                     </p>

@@ -12,21 +12,25 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: route('dashboard'),
         icon: LayoutGrid,
+        role: ['admin', 'anggota'],
     },
     {
         title: 'Kelola Buku',
         href: route('buku.index'),
         icon: BookOpen,
+        role: ['admin'],
     },
     {
         title: 'Kelola Anggota',
         href: route('anggota.index'),
         icon: User,
+        role: ['admin'],
     },
     {
         title: 'Kelola Peminjaman',
         href: route('peminjaman.index'),
         icon: Send,
+        role: ['admin'],
     },
 ];
 

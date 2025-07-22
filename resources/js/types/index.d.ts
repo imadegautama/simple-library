@@ -20,6 +20,7 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    role?: string[]; // Roles that can access this item
 }
 
 export interface SharedData {
@@ -40,6 +41,7 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    role: string; // e.g., 'admin', 'anggota'
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
