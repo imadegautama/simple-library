@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Edit, MoreVertical, Plus, RotateCcw, Search, Trash2 } from 'lucide-react';
+import { ChevronDown, Edit, MoreVertical, Plus, Printer, RotateCcw, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ReturnModal } from '@/components/ui/return-modal';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import AppLayout from '@/layouts/app-layout';
+import { PeminjamanReportService } from '@/services/peminjamanReportService';
 import { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -54,6 +55,45 @@ function PeminjamanIndex({ peminjaman }: PeminjamanIndexProps) {
             }
         },
     });
+
+    // Print functions
+    const handlePrintAllReport = () => {
+        const reportService = new PeminjamanReportService();
+
+        const summary = {
+            totalPeminjaman: peminjaman.length,
+            sedangDipinjam: peminjaman.filter(p => p.status === 'dipinjam').length,
+            sudahDikembalikan: peminjaman.filter(p => p.status === 'dikembalikan').length,
+            terlambat: peminjaman.filter(p => p.status === 'terlambat').length,
+            totalDenda: peminjaman.reduce((sum, p) => sum + (p.denda || 0), 0),
+        };
+
+        const reportData = {
+            peminjaman,
+            summary
+        };
+
+        reportService.generatePeminjamanReport(reportData);
+    };
+
+    const handlePrintByStatus = (status: string) => {
+        const reportService = new PeminjamanReportService();
+
+        const summary = {
+            totalPeminjaman: peminjaman.length,
+            sedangDipinjam: peminjaman.filter(p => p.status === 'dipinjam').length,
+            sudahDikembalikan: peminjaman.filter(p => p.status === 'dikembalikan').length,
+            terlambat: peminjaman.filter(p => p.status === 'terlambat').length,
+            totalDenda: peminjaman.reduce((sum, p) => sum + (p.denda || 0), 0),
+        };
+
+        const reportData = {
+            peminjaman,
+            summary
+        };
+
+        reportService.generatePeminjamanByStatus(reportData, status);
+    };
 
     const showReturnModal = (item: Peminjaman) => {
         setReturnModal({
@@ -176,12 +216,38 @@ function PeminjamanIndex({ peminjaman }: PeminjamanIndexProps) {
                         <h1 className="text-3xl font-bold text-foreground">Peminjaman Buku</h1>
                     </div>
 
-                    <Button asChild>
-                        <Link href={route('peminjaman.create')}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Tambah Peminjaman
-                        </Link>
-                    </Button>
+                    <div className="flex items-center space-x-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline">
+                                    <Printer className="h-4 w-4 mr-2" />
+                                    Print Laporan
+                                    <ChevronDown className="h-4 w-4 ml-2" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={handlePrintAllReport}>
+                                    Semua Peminjaman
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handlePrintByStatus('dipinjam')}>
+                                    Sedang Dipinjam
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handlePrintByStatus('dikembalikan')}>
+                                    Sudah Dikembalikan
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handlePrintByStatus('terlambat')}>
+                                    Terlambat
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <Button asChild>
+                            <Link href={route('peminjaman.create')}>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Tambah Peminjaman
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
 
                 {/* DataTable */}

@@ -1,10 +1,13 @@
 import { Head } from '@inertiajs/react';
-import { AlertTriangle, Book, BookOpen, Calendar, CheckCircle, Package, RotateCcw, TrendingUp, Users } from 'lucide-react';
+import { AlertTriangle, Book, BookOpen, Calendar, CheckCircle, ChevronDown, Package, Printer, RotateCcw, TrendingUp, Users } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { SimpleBarChart } from '@/components/ui/simple-bar-chart';
 import { StatsCard } from '@/components/ui/stats-card';
 import AppLayout from '@/layouts/app-layout';
+import { ReportService } from '@/services/reportService';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -48,22 +51,97 @@ interface AnggotaAktif {
     total_peminjaman: number;
 }
 
+interface RecentActivity {
+    id: number;
+    anggota_nama: string;
+    judul_buku: string;
+    tanggal_pinjam: string;
+    tanggal_kembali: string | null;
+    status: string;
+    denda: number;
+}
+
 interface DashboardProps {
     stats: DashboardStats;
     chartData: ChartData[];
     bukuPopuler: BukuPopuler[];
     anggotaAktif: AnggotaAktif[];
+    recentActivities: RecentActivity[];
 }
 
-export default function Dashboard({ stats, chartData, bukuPopuler, anggotaAktif }: DashboardProps) {
+export default function Dashboard({ stats, chartData, bukuPopuler, anggotaAktif, recentActivities }: DashboardProps) {
+    // Print function for dashboard report
+    const handlePrintDashboardReport = () => {
+        const reportService = new ReportService();
+
+        const reportData = {
+            statistics: {
+                totalBuku: stats.totalBuku,
+                totalAnggota: stats.totalAnggota,
+                totalPeminjaman: stats.totalPeminjaman,
+                totalPengembalian: stats.totalPeminjaman - stats.bukuDipinjam, // Calculate returns
+                bukuDipinjam: stats.bukuDipinjam,
+                bukuTersedia: stats.bukuTersedia,
+                dendaTerkumpul: stats.totalDenda,
+            },
+            recentActivities,
+        };
+
+        reportService.generateDashboardReport(reportData);
+    };
+
+    // Print function for monthly report
+    const handlePrintMonthlyReport = () => {
+        const reportService = new ReportService();
+        const currentDate = new Date();
+        const month = (currentDate.getMonth() + 1).toString();
+        const year = currentDate.getFullYear().toString();
+
+        const reportData = {
+            statistics: {
+                totalBuku: stats.totalBuku,
+                totalAnggota: stats.totalAnggota,
+                totalPeminjaman: stats.peminjamanBulanIni, // Use monthly data
+                totalPengembalian: stats.pengembalianHariIni, // This should be monthly in real implementation
+                bukuDipinjam: stats.bukuDipinjam,
+                bukuTersedia: stats.bukuTersedia,
+                dendaTerkumpul: stats.totalDenda,
+            },
+            recentActivities: recentActivities.slice(0, 5), // Limit for monthly report
+        };
+
+        reportService.generateMonthlyReport(reportData, month, year);
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-6">
                 {/* Welcome Section */}
-                <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-foreground">Dashboard Perpustakaan</h1>
-                    <p className="mt-2 text-muted-foreground">Ringkasan aktivitas dan statistik sistem perpustakaan</p>
+                <div className="mb-6 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-foreground">Dashboard Perpustakaan</h1>
+                        <p className="mt-2 text-muted-foreground">Ringkasan aktivitas dan statistik sistem perpustakaan</p>
+                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="flex items-center gap-2">
+                                <Printer className="h-4 w-4" />
+                                Cetak Laporan
+                                <ChevronDown className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={handlePrintDashboardReport}>
+                                <Printer className="mr-2 h-4 w-4" />
+                                Laporan Dashboard
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={handlePrintMonthlyReport}>
+                                <Calendar className="mr-2 h-4 w-4" />
+                                Laporan Bulanan
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
 
                 {/* Main Stats Grid */}

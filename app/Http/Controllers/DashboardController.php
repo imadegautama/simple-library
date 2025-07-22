@@ -72,6 +72,24 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        // Aktivitas peminjaman terbaru (untuk laporan)
+        $recentActivities = DB::table('peminjaman')
+            ->join('users', 'peminjaman.id_anggota', '=', 'users.id')
+            ->join('peminjaman_detail', 'peminjaman.id_peminjaman', '=', 'peminjaman_detail.id_peminjaman')
+            ->join('buku', 'peminjaman_detail.id_buku', '=', 'buku.id_buku')
+            ->select(
+                'peminjaman.id_peminjaman as id',
+                'users.name as anggota_nama',
+                'buku.judul as judul_buku',
+                'peminjaman.tanggal_pinjam',
+                'peminjaman.tanggal_kembali',
+                'peminjaman.status',
+                'peminjaman.denda'
+            )
+            ->orderBy('peminjaman.tanggal_pinjam', 'desc')
+            ->limit(10)
+            ->get();
+
         return Inertia::render('dashboard', [
             'stats' => [
                 'totalBuku' => $totalBuku,
@@ -90,6 +108,7 @@ class DashboardController extends Controller
             'chartData' => $chartData,
             'bukuPopuler' => $bukuPopuler,
             'anggotaAktif' => $anggotaAktif,
+            'recentActivities' => $recentActivities,
         ]);
     }
 }
