@@ -232,9 +232,9 @@ export default function Welcome({ bukuTersedia, stats }: WelcomeProps) {
 
                         <div className="mt-12 text-center">
                             <Button size="lg" asChild>
-                                <Link href={auth.user ? route('dashboard') : route('register')}>
+                                <Link href={route('list-buku.index')}>
                                     <BookOpen className="mr-2 h-5 w-5" />
-                                    {auth.user ? 'Lihat Semua Buku' : 'Daftar untuk Meminjam'}
+                                    Lihat Semua Buku
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </Link>
                             </Button>

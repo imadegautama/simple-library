@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\AnggotaDashboardController;
+use App\Http\Controllers\BooksController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PeminjamanController;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
+Route::get('/list-buku', [BooksController::class, 'index'])->name('list-buku.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard route dengan logic role-based
